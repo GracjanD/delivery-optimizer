@@ -1,6 +1,7 @@
 package com.gracjand.deliveryoptimizer.service;
 
 import com.gracjand.deliveryoptimizer.entity.Product;
+import com.gracjand.deliveryoptimizer.exception.ProductNotFoundException;
 import com.gracjand.deliveryoptimizer.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 
@@ -26,11 +27,15 @@ public class ProductService {
         return productRepository.findAll();
     }
 
-    public Optional<Product> getById(Long id){
-        return productRepository.findById(id);
+    public Product getById(Long id){
+        return productRepository.findById(id)
+                .orElseThrow(() -> new ProductNotFoundException(id));
     }
 
     public void deleteById(Long id){
+        if(productRepository.findById(id).isEmpty()){
+            throw new ProductNotFoundException(id);
+        }
         productRepository.deleteById(id);
     }
 }
