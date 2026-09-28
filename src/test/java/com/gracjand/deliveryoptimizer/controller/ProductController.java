@@ -1,5 +1,6 @@
 package com.gracjand.deliveryoptimizer.controller;
 
+import com.gracjand.deliveryoptimizer.dto.CreateProductRequest;
 import com.gracjand.deliveryoptimizer.entity.Product;
 import com.gracjand.deliveryoptimizer.exception.ProductNotFoundException;
 import com.gracjand.deliveryoptimizer.service.ProductService;
@@ -35,8 +36,8 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<Product> create(@RequestBody Product product){
-        Product created = productService.create(product.getName(), product.getPrice());
+    public ResponseEntity<Product> create(@RequestBody CreateProductRequest request){
+        Product created = productService.create(request.name(), request.price());
         return ResponseEntity.status(HttpStatus.CREATED)
                 .header("Location", "/api/products/" + created.getId())
                 .body(created);
