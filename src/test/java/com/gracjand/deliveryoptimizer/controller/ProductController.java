@@ -4,6 +4,7 @@ import com.gracjand.deliveryoptimizer.dto.CreateProductRequest;
 import com.gracjand.deliveryoptimizer.entity.Product;
 import com.gracjand.deliveryoptimizer.exception.ProductNotFoundException;
 import com.gracjand.deliveryoptimizer.service.ProductService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -36,7 +37,7 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<Product> create(@RequestBody CreateProductRequest request){
+    public ResponseEntity<Product> create(@Valid @RequestBody CreateProductRequest request){
         Product created = productService.create(request.name(), request.price());
         return ResponseEntity.status(HttpStatus.CREATED)
                 .header("Location", "/api/products/" + created.getId())
