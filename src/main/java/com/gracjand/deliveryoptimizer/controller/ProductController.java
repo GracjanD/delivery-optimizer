@@ -2,7 +2,6 @@ package com.gracjand.deliveryoptimizer.controller;
 
 import com.gracjand.deliveryoptimizer.dto.CreateProductRequest;
 import com.gracjand.deliveryoptimizer.entity.Product;
-import com.gracjand.deliveryoptimizer.exception.ProductNotFoundException;
 import com.gracjand.deliveryoptimizer.service.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
