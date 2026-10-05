@@ -27,13 +27,8 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Product> getById(@PathVariable Long id){
-        try {
-            Product product = productService.getById(id);
-            return ResponseEntity.ok(product);
-        } catch(ProductNotFoundException e) {
-            return ResponseEntity.notFound().build();
-        }
+    public Product getById(@PathVariable Long id){
+        return productService.getById(id);
     }
 
     @PostMapping
@@ -46,11 +41,7 @@ public class ProductController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id){
-        try {
-            productService.deleteById(id);
-            return ResponseEntity.noContent().build();
-        } catch (ProductNotFoundException e){
-            return ResponseEntity.notFound().build();
-        }
+        productService.deleteById(id);
+        return ResponseEntity.noContent().build();
     }
 }
