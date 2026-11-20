@@ -1,16 +1,27 @@
 package com.gracjand.deliveryoptimizer.entity;
 
+import jakarta.persistence.*;
+
 import java.math.BigDecimal;
 import java.util.Objects;
 
+@Entity
+@Table(name = "products")
 public class Product implements Comparable<Product> {
-    private final Long id;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(length = 100, nullable = false)
     private String name;
+
+    @Column(precision = 10, scale = 2, nullable = false)
     private BigDecimal price;
-    private static long nextId = 1;
+
+    public Product(){}
 
     public Product(String name, BigDecimal price){
-        this.id = nextId++;
         this.name = name;
         this.price = price;
     }
@@ -38,20 +49,19 @@ public class Product implements Comparable<Product> {
     @Override
     public boolean equals(Object obj){
         if(obj == this) return true;
-        if(obj == null || obj.getClass() != this.getClass()) return false;
-        Product other = (Product) obj;
-        return Objects.equals(id, other.id);
+        if(!(obj instanceof Product other)) return false;
+        return id != null && Objects.equals(id, other.getId());
     }
 
     @Override
     public int hashCode(){
-        return Objects.hash(id);
+        return Product.class.hashCode();
     }
 
 
     @Override
     public int compareTo(Product other) {
-        return name.compareTo(other.name);
+        return name.compareTo(other.getName());
     }
 
     @Override
