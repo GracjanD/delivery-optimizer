@@ -4,6 +4,7 @@ import com.gracjand.deliveryoptimizer.entity.Product;
 import com.gracjand.deliveryoptimizer.exception.ProductNotFoundException;
 import com.gracjand.deliveryoptimizer.repository.ProductRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -31,8 +32,9 @@ public class ProductService {
                 .orElseThrow(() -> new ProductNotFoundException(id));
     }
 
+    @Transactional
     public void deleteById(Long id){
-        if(productRepository.findById(id).isEmpty()){
+        if(!productRepository.existsById(id)){
             throw new ProductNotFoundException(id);
         }
         productRepository.deleteById(id);
