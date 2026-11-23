@@ -1,5 +1,6 @@
 package com.gracjand.deliveryoptimizer.service;
 
+import com.gracjand.deliveryoptimizer.dto.ProductResponse;
 import com.gracjand.deliveryoptimizer.entity.Product;
 import com.gracjand.deliveryoptimizer.exception.ProductNotFoundException;
 import com.gracjand.deliveryoptimizer.repository.ProductRepository;
@@ -10,6 +11,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @Service
+@Transactional(readOnly = true)
 public class ProductService {
 
     private final ProductRepository productRepository;
@@ -18,25 +20,36 @@ public class ProductService {
         this.productRepository = productRepository;
     }
 
-    public Product create(String name, BigDecimal price){
+    @Transactional
+    public ProductResponse create(String name, BigDecimal price){
         Product product = new Product(name, price);
-        return productRepository.save(product);
+        return toProductResponse(productRepository.save(product));
     }
 
-    public List<Product> getAll(){
-        return productRepository.findAll();
+    public List<ProductResponse> getAll(){
+        return productRepository.findAll().stream()
+                .map(this::toProductResponse)
+                .toList();
     }
 
-    public Product getById(Long id){
-        return productRepository.findById(id)
+    public ProductResponse getById(Long id){
+        Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException(id));
+        return toProductResponse(product);
     }
 
     @Transactional
     public void deleteById(Long id){
-        if(!productRepository.existsById(id)){
-            throw new ProductNotFoundException(id);
-        }
-        productRepository.deleteById(id);
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new ProductNotFoundException(id));
+        productRepository.delete(product);
+    }
+
+    private ProductResponse toProductResponse(Product product){
+        return new ProductResponse(
+                product.getId(),
+                product.getName(),
+                product.getPrice()
+        );
     }
 }

@@ -1,7 +1,7 @@
 package com.gracjand.deliveryoptimizer.controller;
 
 import com.gracjand.deliveryoptimizer.dto.CreateProductRequest;
-import com.gracjand.deliveryoptimizer.entity.Product;
+import com.gracjand.deliveryoptimizer.dto.ProductResponse;
 import com.gracjand.deliveryoptimizer.service.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -21,20 +21,20 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Product>> getAll(){
-        return ResponseEntity.ok(productService.getAll());
+    public List<ProductResponse> getAll(){
+        return productService.getAll();
     }
 
     @GetMapping("/{id}")
-    public Product getById(@PathVariable Long id){
+    public ProductResponse getById(@PathVariable Long id){
         return productService.getById(id);
     }
 
     @PostMapping
-    public ResponseEntity<Product> create(@Valid @RequestBody CreateProductRequest request){
-        Product created = productService.create(request.name(), request.price());
+    public ResponseEntity<ProductResponse> create(@Valid @RequestBody CreateProductRequest request){
+        ProductResponse created = productService.create(request.name(), request.price());
         return ResponseEntity.status(HttpStatus.CREATED)
-                .header("Location", "/api/products/" + created.getId())
+                .header("Location", "/api/products/" + created.id())
                 .body(created);
     }
 
