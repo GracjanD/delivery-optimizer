@@ -1,6 +1,7 @@
 package com.gracjand.deliveryoptimizer.controller;
 
 import com.gracjand.deliveryoptimizer.dto.CreateProductRequest;
+import com.gracjand.deliveryoptimizer.dto.PatchProductRequest;
 import com.gracjand.deliveryoptimizer.dto.ProductResponse;
 import com.gracjand.deliveryoptimizer.dto.UpdateProductRequest;
 import com.gracjand.deliveryoptimizer.service.ProductService;
@@ -43,6 +44,12 @@ public class ProductController {
     public ProductResponse update(@PathVariable Long id,
                                   @Valid @RequestBody UpdateProductRequest request){
         return productService.update(id, request.name(), request.price());
+    }
+
+    @PatchMapping("/{id}")
+    public ProductResponse patch(@PathVariable Long id,
+                                  @Valid @RequestBody PatchProductRequest request){
+        return productService.patch(id, request.name(), request.price());
     }
 
     @DeleteMapping("/{id}")
