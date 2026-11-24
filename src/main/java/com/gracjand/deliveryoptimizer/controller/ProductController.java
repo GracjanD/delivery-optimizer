@@ -2,6 +2,7 @@ package com.gracjand.deliveryoptimizer.controller;
 
 import com.gracjand.deliveryoptimizer.dto.CreateProductRequest;
 import com.gracjand.deliveryoptimizer.dto.ProductResponse;
+import com.gracjand.deliveryoptimizer.dto.UpdateProductRequest;
 import com.gracjand.deliveryoptimizer.service.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -36,6 +37,12 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .header("Location", "/api/products/" + created.id())
                 .body(created);
+    }
+
+    @PutMapping("/{id}")
+    public ProductResponse update(@PathVariable Long id,
+                                  @Valid @RequestBody UpdateProductRequest request){
+        return productService.update(id, request.name(), request.price());
     }
 
     @DeleteMapping("/{id}")

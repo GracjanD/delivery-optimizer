@@ -39,6 +39,15 @@ public class ProductService {
     }
 
     @Transactional
+    public ProductResponse update(Long id, String name, BigDecimal price){
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new ProductNotFoundException(id));
+        product.setName(name);
+        product.setPrice(price);
+        return toProductResponse(product);
+    }
+
+    @Transactional
     public void deleteById(Long id){
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException(id));
